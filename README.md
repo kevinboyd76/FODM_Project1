@@ -1,14 +1,14 @@
 # FODM_Project1
-Big Project for FODM
+#### Big Project for FODM
 
 
 **Due Dates:** <br>
-Project Proposal - May 23
-Final Draft of Paper - June 27
-Project Presentation - July 25 or Aug 1
+Project Proposal - May 23 <br>
+Final Draft of Paper - June 27 <br>
+Project Presentation - July 25 or Aug 1 <br>
 
 
-Presentation Guidelines:
+### Presentation Guidelines:
 1. Introduce what the project is about and how it is connected to Data Science
 2. List key goals for project adn the ones that were achieved during this project
 3. Discuss the work you did on this project and include any tools used
