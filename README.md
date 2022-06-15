@@ -1,9 +1,9 @@
 # FODM_Project1
 
 ### Partners
--Laura Ahaumada
--Shikha Pandey
--Kevin Boyd
+-Laura Ahaumada <br>
+-Shikha Pandey <br>
+-Kevin Boyd <br>
 
 ### Due Dates: <br>
 -Project Proposal - May 23 <br>
