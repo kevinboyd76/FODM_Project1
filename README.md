@@ -2,7 +2,7 @@
 #### Big Project for FODM
 
 
-**Due Dates:** <br>
+### Due Dates: <br>
 Project Proposal - May 23 <br>
 Final Draft of Paper - June 27 <br>
 Project Presentation - July 25 or Aug 1 <br>
@@ -16,6 +16,6 @@ Project Presentation - July 25 or Aug 1 <br>
 5. Presentation between 10-15 minutes (each tema member should highlight their own work and participate in the presentation
 
 
-Prjoect Title: Vaccinations and their Impact on some of the Worlds Most Deadly Diseases
+# Prjoect Title: Vaccinations and their Impact on some of the Worlds Most Deadly Diseases
 
-Datasets: 
+### Datasets: 
