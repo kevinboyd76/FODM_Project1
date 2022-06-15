@@ -2,7 +2,7 @@
 Big Project for FODM
 
 
-Due Dates:
+**Due Dates:** <br>
 Project Proposal - May 23
 Final Draft of Paper - June 27
 Project Presentation - July 25 or Aug 1
