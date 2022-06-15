@@ -1,5 +1,10 @@
 # FODM_Project1
 
+### Partners
+-Laura Ahaumada
+-Shikha Pandey
+-Kevin Boyd
+
 ### Due Dates: <br>
 -Project Proposal - May 23 <br>
 -Final Draft of Paper - June 27 <br>
