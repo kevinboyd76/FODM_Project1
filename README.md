@@ -1,6 +1,6 @@
 # FODM_Project1
 
-### Partners
+### Partners:
 -Laura Ahaumada <br>
 -Shikha Pandey <br>
 -Kevin Boyd <br>
