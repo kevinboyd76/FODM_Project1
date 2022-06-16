@@ -22,4 +22,4 @@
 ### Datasets: 
 
 
-![Alt text](Worldwide Diseases.png)
+![Alt text](WorldwideDiseases.png)
