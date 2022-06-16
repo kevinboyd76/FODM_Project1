@@ -17,9 +17,13 @@
 4. Show a brief demo of the working software, if any development was done
 5. Presentation between 10-15 minutes (each tema member should highlight their own work and participate in the presentation
 
-# Prjoect Title: Vaccinations and their Impact on some of the Worlds Most Deadly Diseases
+# Prjoect Title:
+## Vaccinations and their Impact on some of the Worlds Most Deadly Diseases
 
-### Datasets: 
+### Diseases: 
+![Alt text](Screenshot 2022-05-19 194752.jpg)
 
+![Alt text](Screenshot 2022-05-19 194752.jpg)
 
+### Plots:
 ![Alt text](WorldwideDiseases.png)
