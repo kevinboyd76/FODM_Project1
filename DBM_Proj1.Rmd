@@ -258,7 +258,7 @@ panel.background = element_blank(), axis.line = element_line(colour = "black")) 
 # Dopping Total.expenditure  , Population , Income.composite.of.resources , Hepatitis.B , GDP , Alcohol
 # Dro missing thinness.5.9.years thinness..1.19.years, BMI
 # add 0 for schooling
-
+#
 #Create new variable
 Hepb2$YouthThinness=Hepb2$thinness..1.19.years + Hepb2$thinness.5.9.years
 Hepb2=Hepb2 %>% select(-thinness..1.19.years,-thinness.5.9.years)
