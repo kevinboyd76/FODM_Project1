@@ -126,19 +126,23 @@ grid.arrange(p5,p6,usapolio,usameasles, ncol=2)
 Measles2=read.csv("~/Documents/DB/Project/FODM_Project1/Measles2.csv")
 #head(Measles2)
 names(Measles2)[26] <- "MeaslesCases"
+#Measles2 %>% select (Country.x, Country.y)
+#as.list(unique(Measles2$Country.x ))
 
 Polio2=read.csv("~/Documents/DB/Project/FODM_Project1/Polio2.csv")
 #head(Polio2)
 names(Polio2)[26] <- "PolioCases"
+#as.list(unique(Polio2$Country.x ))
 
 Hepb2=read.csv("~/Documents/DB/Project/FODM_Project1/Hepb2.csv")
 #head(Hepb2)
 names(Hepb2)[26] <- "HepatitisCases"
+#as.list(unique(Hepb2$Country.x ))
 
 Tuberc2=read.csv("~/Documents/DB/Project/FODM_Project1/Tuberc2.csv")
 #head(Tuberc2)
 names(Tuberc2)[26] <- "TuberculosisCasesPer100000ppl"
-
+#as.list(unique(Tuberc2$Country.x ))
 ```
 
 
@@ -163,6 +167,20 @@ panel.background = element_blank(), axis.line = element_line(colour = "black")) 
 ```
 
 ## Measles vs every other attribute
+
++ Measles cases go down from 2000 to 20012
++ There is definetly a significant of measles cases between developed and developing. more cases in developing countries. 
++ **Now we can do an anova to see if the difference is statistically significant.**
++ life expectancy and adult mortality do not seem to have a pattern
++ Infant deaths do seem to have a linear relationship with measles cases
++ Polio inmunization vs Measles cases have an interesting graph it does look like a somewhat negative relationship which would make sense.
++ Diphtheria inmunization vs Measles cases have an interesting graph it does look like a somewhat negative relationship as well
++ **Do box plots of cases per country**
++ YouthThinness vs Measles seem to have somewhat a linear relationship
++ **What do you all think?**
+
+
+
 ```{r, echo=FALSE ,message=FALSE, warning=FALSE,  fig.width = 7, fig.align = "center"}
 # Dopping Total.expenditure , Schooling , Population , Income.composite.of.resources , Hepatitis.B , GDP , Alcohol
 # Dro missing thinness.5.9.years thinness..1.19.years, BMI
@@ -172,8 +190,10 @@ Measles2$YouthThinness=Measles2$thinness..1.19.years + Measles2$thinness.5.9.yea
 Measles2=Measles2 %>% select(-thinness..1.19.years,-thinness.5.9.years)
 
 #Dropping all with columns
-Measles2=Measles2 %>% select(-Total.expenditure,-Schooling,-Population,-Income.composition.of.resources,-Hepatitis.B, -GDP, -Alcohol)
+Measles2=Measles2 %>% select(-Total.expenditure,-Population,-Income.composition.of.resources,-Hepatitis.B, -GDP, -Alcohol)
 
+
+Measles2$Schooling[is.na(Measles2$Schooling)] <- 0
 newData= na.omit(Measles2)
 #sapply(newData, function(x) all_miss=sum(is.na(x)))
 newData$Status=as.factor(newData$Status)
@@ -182,6 +202,7 @@ newData$Country.y=as.factor(newData$Country.y)
 newData$Code1=as.factor(newData$Code1)
 newData$Code=as.factor(newData$Code)
 newData$Year=as.factor(newData$Year)
+newData$logYouthThinness=log(newData$YouthThinness)
 
 par(mfrow=c(1,2))
 plot(MeaslesCases~., data = newData)
@@ -208,6 +229,15 @@ panel.background = element_blank(), axis.line = element_line(colour = "black")) 
 ```
 
 # Polio vs all other attributes
++ Polio cases do seem to go down from 2000 to 2015 but slower decrease than that observed in measles
++ Polio seems to have almost no cases in Developed vs developing!
++ **create more graphs to get deeper insights**
++ ** looking online "Polio is transmitted through contaminated water and food or contact with an infected person." which would explain the developed vs developing graph 
++ Nigeria and Haiti seem to have the highest cases per Country y
++ The graph for code has IRL and MUS as the highest cases
++ **Definetly more graphs on countries for all diseases, as the graphs do noe include all countries**
+
+
 
 ```{r, echo=FALSE ,message=FALSE, warning=FALSE,  fig.width = 7, fig.align = "center"}
 # Dopping Total.expenditure , Schooling , Population , Income.composite.of.resources , Hepatitis.B , GDP , Alcohol
@@ -218,8 +248,10 @@ Polio2$YouthThinness=Polio2$thinness..1.19.years + Polio2$thinness.5.9.years
 Polio2=Polio2 %>% select(-thinness..1.19.years,-thinness.5.9.years)
 
 #Dropping all with columns
-Polio2=Polio2 %>% select(-Total.expenditure,-Schooling,-Population,-Income.composition.of.resources,-Hepatitis.B, -GDP, -Alcohol)
+Polio2=Polio2 %>% select(-Total.expenditure,-Population,-Income.composition.of.resources,-Hepatitis.B, -GDP, -Alcohol)
 
+
+Polio2$Schooling[is.na(Polio2$Schooling)] <- 0
 newData= na.omit(Polio2)
 #sapply(newData, function(x) all_miss=sum(is.na(x)))
 newData$Status=as.factor(newData$Status)
@@ -254,11 +286,23 @@ panel.background = element_blank(), axis.line = element_line(colour = "black")) 
 ```
 
 # HepititisB vs all other attributes
++ There is definetly a decrease in hepatitis cases from 2000 to 20018. The mean decreases and so does the standard deviation
++ We see again a diffent mean in developed vs developing.A mean of about 200 in developed to a mean of  about 1000 in developing.
++ **create a anova to see if it is also statistically significant?**
++ Adult mortality and hepatitis do have a linear relationship!
++ there is also a negative relationship between life expectancy and a measles. THe more measles cases the lower the life expectancy the lower or no measles cases lead to highes life expectancy.
++ there is also a negative relationship with BMI.
++ **there seems to be a relationship, positive, between HIV and hepatitis.we might need to look into it**
++ there is a negative relationship between diptheria and Hepatitis
++ **we could look into it**
++ schooling vs Hepatitis b have a negative relationship
++ youth thiness does have a positive relationship with hepatitis which makes sense
+
 ```{r, echo=FALSE ,message=FALSE, warning=FALSE,  fig.width = 7, fig.align = "center"}
 # Dopping Total.expenditure  , Population , Income.composite.of.resources , Hepatitis.B , GDP , Alcohol
 # Dro missing thinness.5.9.years thinness..1.19.years, BMI
 # add 0 for schooling
-#
+
 #Create new variable
 Hepb2$YouthThinness=Hepb2$thinness..1.19.years + Hepb2$thinness.5.9.years
 Hepb2=Hepb2 %>% select(-thinness..1.19.years,-thinness.5.9.years)
@@ -300,6 +344,19 @@ panel.background = element_blank(), axis.line = element_line(colour = "black")) 
 ```
 
 # Tuberculosis vs all other attributes
++ There is no clear decline of mean deacreas on Tuberculosis per 100000 people crom 200 to 20014.however the range does decreases through the years slightly. 
++ **need to look if there is a vaccine for tuberculosis or more info on it**
++ Developed vs developing has a huge difference the mean in developed is very small. Almos 5 in developed compared to about 20 in developing which is not that much but it has very large outlier and bigger standar devaiation.
++ Life Expectancy has a negative relationship with tuberculosis 
++ adult mortality has a positive relationship with tuberbulosis. the more cases he more changes of dying earlier in age.
++ **what do you all think of the infant deaths? there seems to be somwhat a small positive relationshio..**
++ no relationship with BMI
++ inmunization of polio vs tuberculosis seem to have a negative reationship 
++ same for diphtheria nagative relationship with tubercuosis.
++ **we might want to look into that**
++ Also interesting positive relationship with HIV.AIDS
++ **We should look into that.**
+
 ```{r, echo=FALSE,message=FALSE , warning=FALSE,  fig.width = 7, fig.align = "center"}
 # Dopping Total.expenditure  , Population , Income.composite.of.resources , Hepatitis.B , GDP , Alcohol
 # Dro missing thinness.5.9.years thinness..1.19.years, BMI
