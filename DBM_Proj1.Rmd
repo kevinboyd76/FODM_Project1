@@ -1,0 +1,353 @@
+---
+title: "ProjectDBM"
+author: "Shika, Kevin, Laura"
+date: ""
+output: "pdf_document"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(dpi=1000)
+```
+
+
+```{r  include=FALSE}
+# Reading orginal files
+library(dplyr)
+library(tidyr)
+library(magrittr)
+library(ggplot2)
+hepb=read.csv("~/Documents/DB/Project/FODM_Project1/hepatitis-b-incidence-sdgs.csv")
+#head(hepb)
+colnames(hepb)[4]="HepatitisTotalCases"
+
+tuberc=read.csv("~/Documents/DB/Project/FODM_Project1/incidence-of-tuberculosis-sdgs.csv")
+#head(tuberc)
+colnames(tuberc)[4] <- "TuberculosisCasesPer100000ppl"
+
+measles=read.csv("~/Documents/DB/Project/FODM_Project1/reported-cases-of-measles.csv")
+#head(measles)
+colnames(measles)[4]="MeaslesTotalCases"
+
+polio=read.csv("~/Documents/DB/Project/FODM_Project1/the-number-of-reported-paralytic-polio-cases.csv")
+#head(polio)
+colnames(polio)[4]="PolioTotalCases"
+
+```
+
+
+# Distribution of diseases 
+Cases per year across the world and Cases per year in US
+```{r, echo=FALSE ,message=FALSE, warning=FALSE,  fig.width = 7, fig.align = "center"}
+# Disease plots
+# worldwide incidence per year
+p3 <- ggplot(hepb, aes(x=Year, y=HepatitisTotalCases)) +
+  geom_bar(stat = "identity", fill = "seagreen") +
+  ggtitle("Worldwide Hepetitis B") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5, size=12), axis.title.y = element_blank())
+
+# USA
+ushep=hepb %>% 
+  filter(Code == "USA") %>%
+  ggplot(aes(x=Year, y=HepatitisTotalCases)) +
+  geom_bar(stat = "identity", fill = "seagreen") +
+  ggtitle("Hepatitis B in the USA") +
+  ylab("Hepatitis B Incidence") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5, size=12), axis.title.y = element_blank())
+
+# worldwide incidence per year
+p4 <- ggplot(tuberc, aes(x=Year, y=TuberculosisCasesPer100000ppl)) +
+  geom_bar(stat = "identity", fill = "coral2") +
+  ggtitle("Worldwide Tuberculosis") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5, size=12), axis.title.y = element_blank())
+
+# USA
+usatuberc=tuberc %>% 
+  filter(Code == "USA") %>%
+  ggplot(aes(x=Year, y=TuberculosisCasesPer100000ppl)) +
+  geom_bar(stat = "identity", fill = "coral2") +
+  ggtitle("Tuberculosis in the USA") +
+  ylab("Tuberculosis Incidence per 100000") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5, size=12), axis.title.y = element_blank())
+
+p5 <- ggplot(polio, aes(x=Year, y=PolioTotalCases)) +
+  geom_bar(stat = "identity", fill = "seagreen") +
+  ggtitle("Worldwide cases of Polio") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5, size=12), axis.title.y = element_blank())
+
+# USA
+usapolio=polio %>% 
+  filter(Code == "USA") %>%
+  ggplot(aes(x=Year, y=PolioTotalCases)) +
+  geom_bar(stat = "identity", fill = "seagreen") +
+  ggtitle("Polio in the USA") +
+  ylab("Polio Incidences") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5, size=12), axis.title.y = element_blank())
+
+p6 <- ggplot(measles, aes(x=Year, y=MeaslesTotalCases)) +
+  geom_bar(stat = "identity", fill = "coral2") +
+  ggtitle("Worldwide cases of Measles") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5, size=12), axis.title.y = element_blank())
+
+# USA
+usameasles=measles %>% 
+  filter(Code == "USA") %>%
+  ggplot(aes(x=Year, y=MeaslesTotalCases)) +
+  geom_bar(stat = "identity", fill = "coral2") +
+  ggtitle("Measles in the USA") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5, size=12), axis.title.y = element_blank())
+
+      
+library(gridExtra)
+
+
+grid.arrange(p3,p4,ushep,usatuberc, ncol=2)
+grid.arrange(p5,p6,usapolio,usameasles, ncol=2)
+#grid.arrange(p3,p4,p5,p6,ushep,usatuberc,usapolio,usameasles, ncol=4)
+
+
+
+```
+
+
+
+
+```{r  echo=FALSE,message=FALSE}
+#Reading merged files
+Measles2=read.csv("~/Documents/DB/Project/FODM_Project1/Measles2.csv")
+#head(Measles2)
+names(Measles2)[26] <- "MeaslesCases"
+
+Polio2=read.csv("~/Documents/DB/Project/FODM_Project1/Polio2.csv")
+#head(Polio2)
+names(Polio2)[26] <- "PolioCases"
+
+Hepb2=read.csv("~/Documents/DB/Project/FODM_Project1/Hepb2.csv")
+#head(Hepb2)
+names(Hepb2)[26] <- "HepatitisCases"
+
+Tuberc2=read.csv("~/Documents/DB/Project/FODM_Project1/Tuberc2.csv")
+#head(Tuberc2)
+names(Tuberc2)[26] <- "TuberculosisCasesPer100000ppl"
+
+```
+
+
+
+```{r  echo=FALSE, warning=FALSE,message=FALSE}
+library(Hmisc)
+#describe(Measles2)
+
+all_missing=data.frame(Count=(c(sapply(Measles2, function(x) all_miss=sum(is.na(x))))), columns=names(Measles2))
+all_missing[all_missing == "Income.composition.of.resources"] = "IncomeResources"
+all_missing[all_missing == "percentage.expenditure"] = "%Expenditure"
+#Plot!
+mesmiss=all_missing %>% ggplot(aes(x=Count, y=columns, fill=columns)) + geom_col(position = "dodge") +
+  xlab("Total amount of missing values") + ggtitle("Missing values per variable in Measles data") +
+  geom_text(size=3,position = position_dodge(width= .5), aes(label=Count),vjust=0.5, hjust = -0.20) +
+  theme(axis.text = element_text(size = 10)) + ylab("Variable")+ theme(legend.position="none") +  theme(panel.grid.major = element_blank(), axis.title.y = element_blank(),panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black")) + 
+  theme(
+  plot.title = element_text(color = "black", size = 10, face = "italic", hjust=0.5))
+#mesmiss
+
+```
+
+## Measles vs every other attribute
+```{r, echo=FALSE ,message=FALSE, warning=FALSE,  fig.width = 7, fig.align = "center"}
+# Dopping Total.expenditure , Schooling , Population , Income.composite.of.resources , Hepatitis.B , GDP , Alcohol
+# Dro missing thinness.5.9.years thinness..1.19.years, BMI
+
+#Create new variable
+Measles2$YouthThinness=Measles2$thinness..1.19.years + Measles2$thinness.5.9.years
+Measles2=Measles2 %>% select(-thinness..1.19.years,-thinness.5.9.years)
+
+#Dropping all with columns
+Measles2=Measles2 %>% select(-Total.expenditure,-Schooling,-Population,-Income.composition.of.resources,-Hepatitis.B, -GDP, -Alcohol)
+
+newData= na.omit(Measles2)
+#sapply(newData, function(x) all_miss=sum(is.na(x)))
+newData$Status=as.factor(newData$Status)
+newData$Country.x=as.factor(newData$Country.x)
+newData$Country.y=as.factor(newData$Country.y)
+newData$Code1=as.factor(newData$Code1)
+newData$Code=as.factor(newData$Code)
+newData$Year=as.factor(newData$Year)
+
+par(mfrow=c(1,2))
+plot(MeaslesCases~., data = newData)
+#plot(MeaslesCases~., data = newData, palatte="blue")
+
+```
+ 
+```{r  echo=FALSE,message=FALSE}
+#head(Polio2)
+all_missing=data.frame(Count=(c(sapply(Polio2, function(x) all_miss=sum(is.na(x))))), columns=names(Polio2))
+
+all_missing[all_missing == "Income.composition.of.resources"] = "IncomeResources"
+all_missing[all_missing == "percentage.expenditure"] = "%Expenditure"
+
+#Plot!
+poliomiss=all_missing %>% ggplot(aes(x=Count, y=columns, fill=columns)) + geom_col(position = "dodge") +
+  xlab("Total amount of missing values") + ggtitle("Missing values per variable in Polio dataset") +
+  geom_text(size=3,position = position_dodge(width= .5), aes(label=Count),vjust=0.5, hjust = -0.20) +
+  theme(axis.text = element_text(size = 10)) + ylab("Variable")+ theme(legend.position="none") +  theme(panel.grid.major = element_blank(), axis.title.y = element_blank(),panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black")) + 
+  theme(
+  plot.title = element_text(color = "black", size = 10, face = "italic", hjust=0.5))
+#poliomiss
+```
+
+# Polio vs all other attributes
+
+```{r, echo=FALSE ,message=FALSE, warning=FALSE,  fig.width = 7, fig.align = "center"}
+# Dopping Total.expenditure , Schooling , Population , Income.composite.of.resources , Hepatitis.B , GDP , Alcohol
+# Dro missing thinness.5.9.years thinness..1.19.years, BMI
+
+#Create new variable
+Polio2$YouthThinness=Polio2$thinness..1.19.years + Polio2$thinness.5.9.years
+Polio2=Polio2 %>% select(-thinness..1.19.years,-thinness.5.9.years)
+
+#Dropping all with columns
+Polio2=Polio2 %>% select(-Total.expenditure,-Schooling,-Population,-Income.composition.of.resources,-Hepatitis.B, -GDP, -Alcohol)
+
+newData= na.omit(Polio2)
+#sapply(newData, function(x) all_miss=sum(is.na(x)))
+newData$Status=as.factor(newData$Status)
+newData$Country.x=as.factor(newData$Country.x)
+newData$Country.y=as.factor(newData$Country.y)
+newData$Code1=as.factor(newData$Code1)
+newData$Code=as.factor(newData$Code)
+newData$Year=as.factor(newData$Year)
+
+par(mfrow=c(1,2))
+plot(PolioCases~., data = newData)
+```
+
+
+```{r, include=FALSE ,message=FALSE, warning=FALSE,  fig.width = 7, fig.align = "center"}
+
+all_missing=data.frame(Count=(c(sapply(Hepb2, function(x) all_miss=sum(is.na(x))))), columns=names(Hepb2))
+
+all_missing[all_missing == "Income.composition.of.resources"] = "IncomeResources"
+all_missing[all_missing == "percentage.expenditure"] = "%Expenditure"
+
+#Plot!
+hempmiss=all_missing %>% ggplot(aes(x=Count, y=columns, fill=columns)) + geom_col(position = "dodge") +
+  xlab("Total amount of missing values") + ggtitle("Missing values per variable in Hepititis dataset") +
+  geom_text(size=3,position = position_dodge(width= .5), aes(label=Count),vjust=0.5, hjust = -0.20) +
+  theme(axis.text = element_text(size = 10)) + ylab("Variable")+ theme(legend.position="none") +  theme(panel.grid.major = element_blank(), axis.title.y = element_blank(),panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black")) + 
+  theme(
+  plot.title = element_text(color = "black", size = 10, face = "italic", hjust=0.5))
+#hempmiss
+
+```
+
+# HepititisB vs all other attributes
+```{r, echo=FALSE ,message=FALSE, warning=FALSE,  fig.width = 7, fig.align = "center"}
+# Dopping Total.expenditure  , Population , Income.composite.of.resources , Hepatitis.B , GDP , Alcohol
+# Dro missing thinness.5.9.years thinness..1.19.years, BMI
+# add 0 for schooling
+
+#Create new variable
+Hepb2$YouthThinness=Hepb2$thinness..1.19.years + Hepb2$thinness.5.9.years
+Hepb2=Hepb2 %>% select(-thinness..1.19.years,-thinness.5.9.years)
+
+#Dropping all with columns
+Hepb2=Hepb2 %>% select(-Total.expenditure,-Population,-Income.composition.of.resources,-Hepatitis.B, -GDP, -Alcohol)
+Hepb2$Schooling[is.na(Hepb2$Schooling)] <- 0
+newData= na.omit(Hepb2)
+#sapply(newData, function(x) all_miss=sum(is.na(x)))
+newData$Status=as.factor(newData$Status)
+newData$Country.x=as.factor(newData$Country.x)
+newData$Country.y=as.factor(newData$Country.y)
+newData$Code1=as.factor(newData$Code1)
+newData$Code=as.factor(newData$Code)
+newData$Year=as.factor(newData$Year)
+
+
+par(mfrow=c(1,2))
+plot(HepatitisCases~., data = newData)
+```
+
+```{r, include=FALSE ,message=FALSE, warning=FALSE, fig.width = 7, fig.align = "center"}
+
+all_missing=data.frame(Count=(c(sapply(Tuberc2, function(x) all_miss=sum(is.na(x))))), columns=names(Tuberc2))
+
+all_missing[all_missing == "Income.composition.of.resources"] = "IncomeResources"
+all_missing[all_missing == "percentage.expenditure"] = "%Expenditure"
+
+#Plot!
+tubermiss=all_missing %>% ggplot(aes(x=Count, y=columns, fill=columns)) + geom_col(position = "dodge") +
+  xlab("Total amount of missing values") + ggtitle("Missing values per variable in Tuberculosis") +
+  geom_text(size=3,position = position_dodge(width= .5), aes(label=Count),vjust=0.5, hjust = -0.20) +
+  theme(axis.text = element_text(size = 10)) + ylab("Variable")+ theme(legend.position="none") +  theme(panel.grid.major = element_blank(), axis.title.y = element_blank(),panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black")) + 
+  theme(
+  plot.title = element_text(color = "black", size = 10, face = "italic", hjust=0.5))
+
+#tubermiss
+```
+
+# Tuberculosis vs all other attributes
+```{r, echo=FALSE,message=FALSE , warning=FALSE,  fig.width = 7, fig.align = "center"}
+# Dopping Total.expenditure  , Population , Income.composite.of.resources , Hepatitis.B , GDP , Alcohol
+# Dro missing thinness.5.9.years thinness..1.19.years, BMI
+# add 0 for schooling
+
+#Create new variable
+Tuberc2$YouthThinness=Tuberc2$thinness..1.19.years + Tuberc2$thinness.5.9.years
+Tuberc2=Tuberc2 %>% select(-thinness..1.19.years,-thinness.5.9.years)
+
+#Dropping all with columns
+Tuberc2=Tuberc2 %>% select(-Total.expenditure,-Population,-Income.composition.of.resources,-Hepatitis.B, -GDP, -Alcohol)
+Tuberc2$Schooling[is.na(Tuberc2$Schooling)] <- 0
+newData= na.omit(Tuberc2)
+#sapply(newData, function(x) all_miss=sum(is.na(x)))
+newData$Status=as.factor(newData$Status)
+newData$Country.x=as.factor(newData$Country.x)
+newData$Country.y=as.factor(newData$Country.y)
+newData$Code1=as.factor(newData$Code1)
+newData$Code=as.factor(newData$Code)
+newData$Year=as.factor(newData$Year)
+
+par(mfrow=c(1,2))
+plot(TuberculosisCasesPer100000ppl~., data = newData)
+```
+
+```{r  echo=FALSE, warning=FALSE,message=FALSE}
+mesmiss
+poliomiss
+hempmiss
+tubermiss
+
+# MERGING ALL DATA
+
+#hepatitis$dissease=rep("hepatitis", dim(hepatitis)[1])
+#tubercul$dissease=rep("tubercul", dim(tubercul)[1])
+#measle$dissease=rep("measle", dim(measle)[1])
+#polio$dissease=rep("polio", dim(polio)[1])
+
+#full <- merge(hepatitis, tubercul, by = "Entity")
+#full <- merge(full, measle, by="Entity")
+#full<-merge(full,polio, by="Entity")
+
+```
+
+
+
+
+
+
+
+
+
