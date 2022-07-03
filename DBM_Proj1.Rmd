@@ -479,8 +479,9 @@ head(allCases)
 + **Both Developing and Developed Countries had Tuberculosis cases and HepatitisB**
 
 + Now when it come to actual cases in developed vs developing
-+ Here is the table of tha actual difference and percentage which is actually not that much
-+ **tried to graph but having issue...need help**
++ **Here is the table of tha actual difference and percentage which is actually not that much**
++ polio developed vs developed almost no difference
+
 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
@@ -492,12 +493,14 @@ CountryCasesStatus=allCases %>% group_by(disease, Status.x) %>%
 
 #Focusing on Developed Vs Developing
 developedVSdeveloping=CountryCasesStatus %>% select(disease, Status.x, ActualCases) %>% spread( Status.x,ActualCases)
-developedVSdeveloping$percent=((developedVSdeveloping$Developed/developedVSdeveloping$Developing)*100)
+developedVSdeveloping$percentDifference=round(((developedVSdeveloping$Developed/developedVSdeveloping$Developing)*100),2)
 
 developedVSdeveloping
 
+library(ggplot2)
 ###help here can't seem to graph thisss...
-#developedVSdeveloping %>% ggplot(aes(x=percent, fill=disease)) + geom_bar(stat="identity")
+ggplot(developedVSdeveloping,aes(y=percentDifference, x=disease, fill=disease)) + geom_col()+ scale_fill_brewer(palette = "Set2")+ theme_classic() + geom_text(data=developedVSdeveloping, aes(x=disease, label=paste(percentDifference,"%"), y=percentDifference, fill=NULL), nudge_y=.2)+ ggtitle("Actual % difference between Developed vs Developing per disease ")
+
 
 
 ```
@@ -506,9 +509,11 @@ developedVSdeveloping
 
 CountryCasesStatus
 
-CountryCasesStatus %>% ggplot(aes(x=ActualCases, y=disease,color=disease)) + geom_boxplot()
-allCases %>% ggplot(aes(x=cases, fill=disease)) + geom_histogram() + facet_wrap(~disease, ncol=1)
-ggplot(allCases, aes(y=cases, x=disease, color=Status.x)) + geom_boxplot()+ facet_wrap(~Status.x, ncol=1)
+CountryCasesStatus %>% ggplot(aes(x=ActualCases, y=disease,color=disease)) + geom_boxplot()+scale_fill_brewer(palette = "Set2")+ theme_classic() 
+
+allCases %>% ggplot(aes(x=cases, fill=disease)) + geom_histogram() + facet_wrap(~disease, ncol=1)+scale_fill_brewer(palette = "Set2")+ theme_classic() 
+
+ggplot(allCases, aes(y=cases, x=disease, color=disease)) + geom_boxplot()+ facet_wrap(~Status.x, ncol=1)+scale_fill_brewer(palette = "Set2")+ theme_classic() 
 #mosaicplot(Status.x~disease, data=allCases)
 ```
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
@@ -521,7 +526,7 @@ perAllCases$WithoutDisease=perAllCases$TotalCountries-perAllCases$TotalCountries
 #perAllCases
 
 perAllCases  %>% ggplot(aes(x=Status.x, y=percentWithDisease, fill=Status.x)) + geom_col()+
-geom_text(data=perAllCases, aes(x=Status.x, label=paste(percentWithDisease,"%"), y=percent, fill=NULL), nudge_y=5) +  scale_fill_manual(values=c("lightblue","cyan3"))+ theme_classic() + ggtitle("Pecent of developed and developing with diseases ")+ xlab("Status")
+geom_text(data=perAllCases, aes(x=Status.x, label=paste(percentWithDisease,"%"), y=percent, fill=NULL), nudge_y=5) + theme_classic() + ggtitle("Pecent of developed and developing with diseases ")+ xlab("Status")+ scale_fill_brewer(palette = "Set2")
 ```
 
 ```{r, include=FALSE, warning=FALSE, message=FALSE}
@@ -540,19 +545,16 @@ measrPerc=perStatus(MeaslesTotal)
 
 a=tuberPerc %>% ggplot(aes(x=Status, y=percent, fill=Status)) + geom_col()+
 geom_text(data=tuberPerc, aes(x=Status, label=paste(percent,"%"), y=percent, fill=NULL), nudge_y=5) +
-  scale_fill_manual(values=c("lightblue",
-                             "cyan3"))+ theme_classic() + ggtitle("Pecent status Tuberculosis Data ")
+  scale_fill_brewer(palette = "Set2")+ theme_classic() + ggtitle("Pecent status Tuberculosis Data ")
 
 b=hpbPerc %>% ggplot(aes(x=Status, y=percent, fill=Status)) + geom_col()+
 geom_text(data=tuberPerc, aes(x=Status, label=paste(percent,"%"), y=percent, fill=NULL), nudge_y=5) +
-  scale_fill_manual(values=c("lightblue",
-                             "cyan3"))+ theme_classic() + ggtitle("Pecent status HPB2 Data ")
+  scale_fill_brewer(palette = "Set2")+ theme_classic() + ggtitle("Pecent status HPB2 Data ")
 
 
 c=polioPerc %>% ggplot(aes(x=Status, y=percent, fill=Status)) + geom_col()+
 geom_text(data=tuberPerc, aes(x=Status, label=paste(percent,"%"), y=percent, fill=NULL), nudge_y=5) +
-  scale_fill_manual(values=c("lightblue",
-                             "cyan3"))+ theme_classic() + ggtitle("Pecent status in Polio Data ")
+  scale_fill_brewer(palette = "Set2")+ theme_classic() + ggtitle("Pecent status in Polio Data ")
 
 d=measrPerc %>% ggplot(aes(x=Status, y=percent, fill=Status)) + geom_col()+
 geom_text(data=tuberPerc, aes(x=Status, label=paste(percent,"%"), y=percent, fill=NULL), nudge_y=5) +
