@@ -425,6 +425,27 @@ plot(HepatitisCases~., data = hp2, col=hp2$Status)
 ```
 
 # Single data with total cases of each disease per country 
++ 133 countries without a specific disease
++ 114 Polio and 19 Measles
+
+Countries without measles cases
+Status
+       n  missing 
+      19        0        
+                                
+Value       Developed Developing
+Frequency           1         18
+Proportion      0.053      0.947
+
+
+Countries without polio cases
+Status.x 
+       n  missing  
+     114        0        
+                                
+Value       Developed Developing
+Frequency          30         84
+Proportion      0.263      0.737
 ```{r, echo=FALSE}
 library(dplyr)
 # Amount of cases
@@ -435,12 +456,11 @@ MeaslesTotal=Measles2  %>% group_by(Country.y, Status) %>% summarise(MeaslesCase
 
 
 full <- merge(TuberTotal, Hepb2Total, by = "Country.y")
-full <- merge(full, PolioTotal, by = "Country.y") %>% select(Country.y,Status.x,PolioCases,TuberculosisCases)
-full <- merge(full, MeaslesTotal, by = "Country.y") %>% select(Country.y,Status.x,MeaslesCases,PolioCases,TuberculosisCases)
+full <- merge(full, PolioTotal, by = "Country.y") %>% select(Country.y,Status.x,PolioCases,TuberculosisCases,HepatitisCases)
+full <- merge(full, MeaslesTotal, by = "Country.y") %>% select(Country.y,Status.x,MeaslesCases,HepatitisCases,PolioCases,TuberculosisCases)
 
 
 allCases = gather(full, disease, cases,MeaslesCases:TuberculosisCases, factor_key=TRUE  )
-
 head(allCases)
 
 
@@ -449,7 +469,48 @@ head(allCases)
 
 + The data is composed of 17% developed countries and 83% developing
 + When filter the data with country disease that is 0 it changes 2%. It changes 15% developed and 85% developing
++ All countries in the data had Tubeculosis
++ **Out of the Developed countries 97% of the developed countries  had Measles cases**
++ **Out of the Developing countries 88% of the developing countries  had Measles cases**
 
++ **Out of the Developed countries 3% of the developed countries  had Polio cases**
++ **Out of the Developing countries 43% of the developing countries  had Polio cases**
+
++ **Both Developing and Developed Countries had Tuberculosis cases and HepatitisB**
+
++ Now when it come to actual cases in developed vs developing
++ Here is the table of tha actual difference and percentage which is actually not that much
++ **tried to graph but having issue...need help**
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+CountryCasesStatus=allCases %>% group_by(disease, Status.x) %>%
+  dplyr::summarize(TotalCountries=n(),CountrieswCase=sum(cases>0), ActualCases=sum(cases)) %>% mutate(NoCases= TotalCountries-CountrieswCase) %>% mutate(PercentDif= round((CountrieswCase/TotalCountries)*100))
+#CountryCasesStatus
+#checking numbers are correct
+#sum(allCases %>% filter(disease=="MeaslesCases" & Status.x=="Developed") %>% select(cases))
+
+#Focusing on Developed Vs Developing
+developedVSdeveloping=CountryCasesStatus %>% select(disease, Status.x, ActualCases) %>% spread( Status.x,ActualCases)
+developedVSdeveloping$percent=((developedVSdeveloping$Developed/developedVSdeveloping$Developing)*100)
+
+developedVSdeveloping
+
+###help here can't seem to graph thisss...
+#developedVSdeveloping %>% ggplot(aes(x=percent, fill=disease)) + geom_bar(stat="identity")
+
+
+```
+# Filter data on Cases vs Status vs Disease and some graphs on it
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+CountryCasesStatus
+
+CountryCasesStatus %>% ggplot(aes(x=ActualCases, y=disease,color=disease)) + geom_boxplot()
+allCases %>% ggplot(aes(x=cases, fill=disease)) + geom_histogram() + facet_wrap(~disease, ncol=1)
+ggplot(allCases, aes(y=cases, x=disease, color=Status.x)) + geom_boxplot()+ facet_wrap(~Status.x, ncol=1)
+#mosaicplot(Status.x~disease, data=allCases)
+```
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 perAllCases=allCases %>% group_by(Status.x) %>%
   dplyr::summarize(TotalCountries=n()) %>% mutate(percent = round((TotalCountries / sum(TotalCountries))*100)) %>% cbind(allCases %>% filter(cases>0) %>% group_by(Status.x) %>%
