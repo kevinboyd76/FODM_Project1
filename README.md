@@ -21,9 +21,9 @@
 ## Vaccinations and their Impact on some of the Worlds Most Deadly Diseases
 
 ### Diseases: 
-![Alt text](Diseases1.jpg)
+![Alt text](Images/Diseases1.jpg)
 
-![Alt text](Diseases2.jpg)
+![Alt text](Imgges/Diseases2.jpg)
 
 ### Plots:
 ![Alt text](WorldwideDiseases.png)
