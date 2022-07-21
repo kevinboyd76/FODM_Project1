@@ -23,7 +23,7 @@
 ### Diseases: 
 ![Alt text](Images/Diseases1.jpg)
 
-![Alt text](Imgges/Diseases2.jpg)
+![Alt text](Images/Diseases2.jpg)
 
 ### Plots:
-![Alt text](WorldwideDiseases.png)
+![Alt text](Images/WorldwideDiseases.png)
